@@ -1,57 +1,59 @@
 <p align="center">
-<img src="https://i.imgur.com/Ua7udoS.png" alt="Traffic Examination"/>
+  <img src="https://i.imgur.com/Ua7udoS.png" alt="Traffic Examination"/>
 </p>
 
-<h1>Network Security Groups (NSGs) and Inspecting Traffic Between Azure Virtual Machines</h1>
-In this tutorial, we observe various network traffic to and from Azure Virtual Machines with Wireshark as well as experiment with Network Security Groups. <br />
+<h1>File Share Permissions and Access Testing</h1>
+I will show you how to share folder permissions with groups in your organization or with specific profiles, so they can edit, have no access, or only read. <br />
 
+<h2>Step 1: Create File Shares with Various Permissions</h2>
 
-<h2>Video Demonstration</h2>
+1. **Log into DC-1 as Domain Admin:**
+   - On DC-1, log in as `mydomain.com\Mateo_admin` (domain admin account).
 
-- ### [YouTube: Azure Virtual Machines, Wireshark, and Network Security Groups](https://www.youtube.com)
+2. **Log into Client-1 as a Normal User:**
+   - On Client-1, log in as `mydomain\<someuser>` (normal user account).
 
-<h2>Environments and Technologies Used</h2>
+3. **Create Folders on DC-1:**
+   - On DC-1, navigate to the `C:\` drive.
+   - Create the following 4 folders:
+     - `read-access`
+     - `write-access`
+     - `no-access`
+     - `accounting` (for later use)
 
-- Microsoft Azure (Virtual Machines/Compute)
-- Remote Desktop
-- Various Command-Line Tools
-- Various Network Protocols (SSH, RDH, DNS, HTTP/S, ICMP)
-- Wireshark (Protocol Analyzer)
+4. **Set Permissions and Share the Folders:**
+   - Right-click each folder, select **Properties**, and go to the **Sharing** tab.
+   - Click **Advanced Sharing** and enable sharing for the folders.
+   
+   Now, set the following permissions for each folder:
+   - **Folder: "Midi- Mateo"**
+     - Group: `Domain Users`
+     - Permissions: **Read**
+     - (Share this folder)
+  <img src="https://i.imgur.com/QQaz16M.png" alt="Traffic Examination"/>   
+   - **Folder: "Mateo-songs"**
+     - Group: `Domain Users`
+     - Permissions: **Read/Write**
+     - (Share this folder)
+   
+   - **Folder: "no-access"**
+     - Group: `Domain Admins`
+     - Permissions: **Read/Write**
+     - (Share this folder)
 
-<h2>Operating Systems Used </h2>
+5. **Skip setting permissions for the "accounting" folder for now.**
 
-- Windows 10 (21H2)
-- Ubuntu Server 20.04
+---
 
-<h2>High-Level Steps</h2>
+<h2>Step 2: Attempt to Access File Shares as a Normal User</h2>
 
-- Step 1
-- Step 2
-- Step 3
-- Step 4
+1. **On Client-1 (Normal User) Access:**
+   - On Client-1, open **Run** (Press `Windows + R`).
+   - In the **Run** box, type: `\\dc-1` and press **Enter**.
+   - You should see the list of shared folders on DC-1.
 
-<h2>Actions and Observations</h2>
-
-<p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-</p>
-<p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-</p>
-<br />
-
-<p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-</p>
-<p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-</p>
-<br />
-
-<p>
-<img src="https://i.imgur.com/DJmEXEB.png" height="80%" width="80%" alt="Disk Sanitization Steps"/>
-</p>
-<p>
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-</p>
-<br />
+2. **Check Access to Each Folder:**
+   - Try accessing each folder:
+     - **Read-access folder:** Can you open it? Can you only view files?
+     - **Write-access folder:** Can you create, modify, and delete files in this folder?
+     - **No-access folder:** Can you access it? (You should not be able to access it as a normal user.)
